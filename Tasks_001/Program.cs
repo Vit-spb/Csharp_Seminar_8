@@ -1,10 +1,7 @@
 ﻿/*Напишите программу для работы с матрицей целых чисел.
-
 Реализуйте класс MatrixOperations, который содержит следующие статические методы:
-
 PrintMatrix(int[,] matrix): Метод для вывода матрицы на экран. 
 Он принимает на вход двумерный массив целых чисел matrix и выводит его элементы в виде таблицы.
-
 SortRowsDescending(int[,] matrix): Метод для сортировки строк матрицы по убыванию. 
 Он принимает на вход двумерный массив целых чисел matrix и сортирует каждую строку матрицы так, чтобы элементы в каждой строке шли по убыванию.*/
 
@@ -25,26 +22,31 @@ public class Answer
     }
     }
 
-    public static void SortRowsDescending(int[,] matrix)
+    
+public static void SortRowsDescending(int[,] matrix)
     {
-// Введите свое решение ниже
-int[,] result = new int [matrix.GetLength(0), matrix.GetLength(1)];
-
-
-         for (int i = 0; i < matrix.GetLength(0); i++) // строчки
-    { 
-               for (int j = 0; j < matrix.GetLength(1); j++) // столбцы
+        // Введите свое решение н
+      
+        for (int j = 0; j < matrix.GetLength(0); j++)
+        {
+            for (int k = 0; k < matrix.GetLength(1) - 1; k++)
+            {
+                bool f = false;
+                
+                for (int i = 0; i < matrix.GetLength(1) - 1 - k; i++)
                 {
-                    if (matrix[i , j] > matrix[i, j+1])
+                    if (matrix[j, i] < matrix[j, i + 1])
                     {
-                        result[i, j] = matrix[i, j];
-                    }  
-                    else
-                    result[i, j] = matrix[i, j+1];  
+                        int temp = matrix[j, i];
+                        matrix[j, i] = matrix[j, i + 1];
+                        matrix[j, i + 1] = temp;
+                        f = true;
+                    }
                 }
-        
-    }
-       
+                
+                if (!f) break;
+            }
+        }
     }
 // Не удаляйте и не меняйте метод Main! 
     public static void Main(string[] args)
