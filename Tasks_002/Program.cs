@@ -1,64 +1,90 @@
-﻿// Задача 53: Задайте двумерный массив. Напишите программу,
-// которая поменяет местами первую и последнюю строку
-// массива.
+﻿using System;
 
-Console.Write("Введите количество строк в массиве: ");
-int rows = Convert.ToInt32(Console.ReadLine());
+public class Answer
+{
+    public static int SumOfRow(int[,] matrix, int row)
+    {
+// Введите свое решение ниже
+int sum = 0;
+    for (int i = 0; i < matrix.GetLength(1); i++)
+    {
+    sum += matrix[row,i];
+    }
+    return sum;
+    }
 
-Console.Write("Введите количество столбцов в массиве: ");
-int columns = Convert.ToInt32(Console.ReadLine());
-// // // Матрица - таблица, размером m(кол-во строк) на n (кол-во столбцов)
-// // // minValue - мин. число для рандома, maxValue - макс. число для рандома
+    public static int[] MinimumSumRow(int[,] matrix)
+    {
+// Введите свое решение ниже
+int minSum = SumOfRow(matrix, 0);
+int minRow = 0;
+    for (int i = 1; i < matrix.GetLength(0); i ++)
+{
+    int sum = SumOfRow(matrix, i);
+        if (sum < minSum)
+        {
+        minSum = sum;
+        minRow = i;
+}
+}
+return new int[] {minRow, minSum};
+    }
 
-int[,] GetMatrix(int m, int n, int minValue, int maxValue)
-{
-int[,] matrix = new int[m, n]; // [кол-во строк, кол-во столбцов]
-for (int i = 0; i < matrix.GetLength(0); i++) // строчки, m = matrix.GetLength(0)
-{
-// i, j, k, m
-for (int j = 0; j < matrix.GetLength(1); j++) // столбцы, n = matrix.GetLength(1)
-{
-matrix[i, j] = new Random().Next(minValue, maxValue + 1);
-}
-}
-return matrix;
-}
+ // Не удаляйте и не меняйте метод Main! 
+    public static void Main(string[] args)
+    {
+        int[,] matrix;
+        if (args.Length == 0)
+        {
+           // Здесь вы можете поменять значения для отправки кода на Выполнение
+          // Если аргументы не переданы, используем матрицу по умолчанию
+            
+            matrix = new int[,]
+            {
+                {5, 2, 9},
+                {8, 1, 4},
+                {6, 7, 3}
+            };
+        }
+        else
+        {
+            // Иначе, парсим аргументы в двумерный массив
+            string[] rows = args[0].Split(';');
+            matrix = new int[rows.Length, rows[0].Split(',').Length];
+            for (int i = 0; i < rows.Length; i++)
+            {
+                string[] elements = rows[i].Split(',');
+                for (int j = 0; j < elements.Length; j++)
+                {
+                    if (int.TryParse(elements[j], out int number))
+                    {
+                        matrix[i, j] = number;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Ошибка при парсинге аргумента {elements[j]}.");
+                        return;
+                    }
+                }
+            }
+        }
 
-void PrintMatrix(int[,] matr)
-{
-for (int i = 0; i < matr.GetLength(0); i++) // строчки
-{
-for (int j = 0; j < matr.GetLength(1); j++) // столбцы
-{
-Console.Write($"{matr[i, j]}\t"); // Литерал, \t = tab
-}
-Console.WriteLine();
-}
-}
+        Console.WriteLine("Исходная матрица:");
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                Console.Write($"{matrix[i, j]}\t");
+            }
+            Console.WriteLine();
+        }
 
-void ChangeRows(int[,] matr)
-{
-int indexLastRow = matr.GetLength(0) - 1; // Индекс посл. стр
-// 1 2 3
-// ..........
-// 4 5 6
-for (int i = 0; i < matr.GetLength(1); i++)
-{
-int temp = matr[0, i]; // temp = matr[0,0]; temp = 1
-matr[0, i] = matr[indexLastRow, i]; // matr[0,0] = 4
-// 4 2 3
-// ..........
-// 4 5 6
-matr[indexLastRow, i] = temp; // temp = 1
-// 4 2 3
-// ..........
-// 1 5 6
+        int[] minSumRow = MinimumSumRow(matrix);
 
-}
-}
+        Console.WriteLine($"\nСумма наименьшей строки (строка {minSumRow[0] + 1}): {minSumRow[1]}");
 
-int[,] array2D = GetMatrix(rows, columns, 0, 10);
-PrintMatrix(array2D);
-Console.WriteLine("Результат: ");
-ChangeRows(array2D);
-PrintMatrix(array2D);
+        int rowToSum = 1; 
+        int sum = SumOfRow(matrix, rowToSum);
+        Console.WriteLine($"Сумма элементов в строке {rowToSum + 1}: {sum}");
+    }
+}
